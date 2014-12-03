@@ -1,0 +1,9 @@
+config.json
+*.js.map.json
+rsync.bat
+node_modules
+.DS_Store
+fontello/css
+fontello/font
+npm-debug.log
+npm-scripts/backup.json
