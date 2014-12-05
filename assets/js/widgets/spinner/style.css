@@ -1,0 +1,14 @@
+.spinner-widget {
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.spinner-widget i {
+  position: fixed;
+  left: calc(50% - 25px);
+  top: calc(50% - 25px);
+  font-size: 50px;
+  color: #00FF00;
+  z-index: 11111;
+}

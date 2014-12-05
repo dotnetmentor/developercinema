@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+node -e "
+  require('dns').resolve('www.google.com', function(err) {
+    if (err) {
+      console.log('no internet not deploying!');
+      process.exit(1);
+    }
+    var config = require('./config');
+    var environment = process.argv[1];
+    if (!config.deploy[environment]) {
+      console.error('no deploy settings found for %s', environment);
+      process.exit(1);
+    }
+    var host   = config.deploy[environment].host;
+    var path   = config.deploy[environment].path;
+    var fs     = require('fs');
+
+    var command = 'rsync . -rcv --delete --exclude .git --exclude-from .gitignore ' + host + ':\"' + path + '\"/' + '\n' +
+                  'rsync fontello -rcv --delete ' + host + ':\"' + path + '\"/' + '\n' +
+                  'ssh ' + host + ' \'(supervisorctl stop developercinema && cd ' + path + ' && npm install --silent && supervisorctl start developercinema) \''
+    ;
+
+    fs.writeFileSync('./deploy_with_rsync', command);
+  });
+" $@
+
+if [ $? -eq 0 ]; then
+  bash ./npm-scripts/make-fontello-fonts
+  bash ./deploy_with_rsync
+
+  node -e "
+    var config = require('./config');
+    var environment = process.argv[1];
+    if (config.deploy[environment]['notify_slack']) {
+      var status = +process.argv.slice(-1) === 0 ? 'successfully' : 'failed';
+      var options = config.deploy.slack['http-options'];
+      options.path += encodeURIComponent('developercinema deployed ' + status + ' to ' + process.argv[1]);
+      var https = require('https');
+      var req = https.request(options);
+      req.end();
+    }
+  " $@ $?
+
+  rm ./deploy_with_rsync
+fi

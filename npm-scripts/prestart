@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+node -e "
+require('dns').resolve('www.google.com', function(err) {
+  process.exit(err ? 1 : 0);
+});
+"
+
+if [ $? -ne 0 ]; then
+  echo "no internet will try and start anyway"
+else
+  if ! [ "$quick" == "1" ]; then
+    npm install
+    if [ ! -f ./config.json ]; then
+      cp ./config.json.example ./config.json
+    else
+      node -e """
+      var extend = require('xtend');
+      var fs = require('fs');
+      var config = require('./config');
+      var example = JSON.parse(fs.readFileSync('./config.json.example'));
+      var merged = extend(example, config);
+      fs.writeFileSync('./config.json', JSON.stringify(merged, null, 4));
+      """
+    fi
+    ./npm-scripts/make-fontello-fonts
+  fi
+fi

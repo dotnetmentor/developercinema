@@ -1,0 +1,9 @@
+.rating-widget .star {
+  margin-right: 3px;
+  font-size: 24px;
+  color: gray;
+}
+
+.rating-widget .star.glow {
+  color: white;
+}

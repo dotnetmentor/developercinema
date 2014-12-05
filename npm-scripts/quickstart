@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+QUICK=1 ./npm-scripts/start

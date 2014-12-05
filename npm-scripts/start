@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+node node_modules/supervisor/lib/cli-wrapper.js -i ./app.js.map.json -w . -e "png|js|css|html|json|svg" index.js

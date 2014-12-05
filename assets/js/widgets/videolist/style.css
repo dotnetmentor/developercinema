@@ -1,0 +1,88 @@
+.videolist-widget {
+  width: 100%;
+  height: 250px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  -moz-overflow-scrolling: touch;
+  -o-overflow-scrolling: touch;
+  -ms-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+  /* disable text selection: */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.videolist-widget h3 * {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.videolist-widget img {
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  float: left;
+  width: 200px;
+  height: 170px;
+}
+
+.videolist-widget a {
+  width: 200px;
+  height: 170px;
+  display: block;
+  text-decoration: none;
+}
+
+.videolist-widget li {
+  width: 200px;
+  height: 170px;
+  display: block;
+  float: left;
+  cursor: pointer;
+  margin: 0 15px 0 15px;
+  list-style: none;
+}
+
+.videolist-widget .duration {
+  margin-top: -170px;
+  float: left;
+  height: 10px;
+  padding: 5px;
+  width: 190px;
+  font-size: 11px;
+  background-color: rgba(139, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.8);
+  height: 10px;
+  display: block;
+  text-align: right;
+}
+
+.videolist-widget .title {
+  margin-top: -18px;
+  float: left;
+  height: 10px;
+  padding: 4px;
+  width: 192px;
+  font-size: 11px;
+  background-color: rgba(139, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.8);
+  display: block;
+}
+
+.videolist-widget ul {
+  margin: 0;
+  padding: 0;
+  white-space:nowrap;
+  height: 190px;
+}
+
+.videolist-widget ul li:last-child {
+  margin-right: 0;
+}
+
+.videolist-widget ul li:first-child {
+  margin-left: 0;
+}
