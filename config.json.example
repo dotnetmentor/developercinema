@@ -1,5 +1,11 @@
 {
   "port": 1500,
+  "embed": {
+    "size": {
+      "width": 320,
+      "height": 300
+    }
+  },
   "vimeo": {
     "access_token": ""
   }

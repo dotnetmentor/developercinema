@@ -26,7 +26,7 @@ Detail.prototype.appendTo = function appendTo(el, data) {
       '.duration': data.duration || '',
       '.author': {_html: data.author || ''},
       '.title': data.title || '',
-      '.description': data.description || ''
+      '.description': {_text: data.description || ''}
     })
   );
 
