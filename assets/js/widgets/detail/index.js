@@ -1,10 +1,13 @@
 var hyperglue = require('hyperglue');
 var inherits = require('inherits');
-var EventEmitter = require('events').EventEmitter;
+var EventEmitter = require('wildemitter');
 var fs = require('fs');
 var observable = require('observable');
 var insertCss = require('insert-css');
 var Rating = require('../rating');
+var Spinner = require('../spinner');
+var bulk = require('bulk-require');
+var player = bulk(__dirname + '/../playerapi', ['**/index.js']);
 
 module.exports = Detail;
 inherits(Detail, EventEmitter);
@@ -16,9 +19,11 @@ function Detail() {
   this.listeners = {
     back: this.emit.bind(this, 'back')
   };
+  EventEmitter.call(this);
 }
 
 Detail.prototype.appendTo = function appendTo(el, data) {
+  this.player = player[data.type]();
   this.data = data;
   this.el = el.appendChild(
     hyperglue(this.html, {
@@ -29,6 +34,17 @@ Detail.prototype.appendTo = function appendTo(el, data) {
       '.description': {_text: data.description || ''}
     })
   );
+
+  this.spinner = Spinner();
+  this.spinner.appendTo(this.el);
+  this.spinner.start();
+
+  this.player.start(this.el.querySelector('iframe'), data.id);
+
+  this.player.on('finished', this.emit.bind(this, 'back'));
+  this.player.on('ready', this.spinner.stop.bind(this.spinner));
+  this.player.on('*', this.emit.bind(this, 'player'));
+  this.player.on('*', console.log.bind(console));
 
   this.rating = Rating();
   this.rating.appendTo(this.el.querySelector('.rating'), 3);
@@ -42,6 +58,7 @@ Detail.prototype._eventListeners = function eventListeners(method) {
 
 Detail.prototype.remove = function remove() {
   if (!this.el) return;
+  this.player.remove();
   this._eventListeners('removeEventListener');
   this.el.parentNode.removeChild(this.el);
   this.el = null;
