@@ -6,6 +6,20 @@
   z-index: 9999;
   width: 100%;
   height: 100%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  -moz-overflow-scrolling: touch;
+  -o-overflow-scrolling: touch;
+  -ms-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+  /* disable text selection: */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .detail-widget .back {
@@ -19,8 +33,8 @@
 }
 
 .detail-widget .spinner-widget i {
-  top: 167px;
-  left: 144px;
+  top: 159px;
+  left: 137px;
 }
 
 .detail-widget .author {
@@ -34,7 +48,7 @@
 
 .detail-widget ul {
   margin: 0;
-  padding: 15px;
+  padding: 15px 0 15px 15px;
   list-style: none;
 }
 
