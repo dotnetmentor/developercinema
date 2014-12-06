@@ -49,3 +49,6 @@ function showVideo(type, video) {
 }
 
 detail.on('back', detail.remove.bind(detail));
+detail.on('*', function(context, name, msg) {
+  console.log((context + ':' + name), msg);
+});

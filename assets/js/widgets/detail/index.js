@@ -44,7 +44,6 @@ Detail.prototype.appendTo = function appendTo(el, data) {
   this.player.on('finished', this.emit.bind(this, 'back'));
   this.player.on('ready', this.spinner.stop.bind(this.spinner));
   this.player.on('*', this.emit.bind(this, 'player'));
-  this.player.on('*', console.log.bind(console));
 
   this.rating = Rating();
   this.rating.appendTo(this.el.querySelector('.rating'), 3);
