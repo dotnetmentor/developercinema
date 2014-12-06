@@ -36,10 +36,6 @@
   left: 137px;
 }
 
-.detail-widget .author {
-  margin-left: 10px;
-}
-
 .detail-widget .video iframe {
   border-radius: 4px;
   background-color: rgba(0, 0, 0, 0.4);

@@ -41,6 +41,7 @@ function searchResponse(results) {
 }
 
 youtube.on('select', showVideo.bind(null, 'youtube'));
+
 vimeo.on('select', showVideo.bind(null, 'vimeo'));
 
 function showVideo(type, video) {
