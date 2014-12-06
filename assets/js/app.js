@@ -19,6 +19,9 @@ spinner.appendTo(body);
 var youtube = widgets.videolist();
 var vimeo = widgets.videolist();
 var detail = widgets.detail();
+var status = widgets.status();
+
+status.appendTo(body);
 
 search.on('search', function search(value) {
   spinner.start();
@@ -51,5 +54,11 @@ function showVideo(type, video) {
 
 detail.on('back', detail.remove.bind(detail));
 detail.on('*', function(context, name, msg) {
+  if (context === 'player' && name === 'finished') {
+    detail.reset();
+    status.update(null, 'Please leave a review!');
+  }
   console.log((context + ':' + name), msg);
 });
+
+detail.on('finished', detail.remove.bind(detail));

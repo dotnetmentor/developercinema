@@ -25,6 +25,7 @@ function Detail() {
 Detail.prototype.appendTo = function appendTo(el, data) {
   this.player = player[data.type]();
   this.data = data;
+  this.placeholder = el;
   this.el = el.appendChild(
     hyperglue(this.html, {
       '.video': {_html: data.embed || ''},
@@ -41,7 +42,6 @@ Detail.prototype.appendTo = function appendTo(el, data) {
 
   this.player.start(this.el.querySelector('iframe'), data.id);
 
-  this.player.on('finished', this.emit.bind(this, 'back'));
   this.player.on('ready', this.spinner.stop.bind(this.spinner));
   this.player.on('*', this.emit.bind(this, 'player'));
 
@@ -53,6 +53,11 @@ Detail.prototype.appendTo = function appendTo(el, data) {
 
 Detail.prototype._eventListeners = function eventListeners(method) {
   this.el.querySelector('.back')[method]('click', this.listeners.back);
+};
+
+Detail.prototype.reset = function reset() {
+  this.remove();
+  this.appendTo(this.placeholder, this.data);
 };
 
 Detail.prototype.remove = function remove() {
