@@ -17,6 +17,7 @@ function Search() {
 Search.prototype.appendTo = function appendTo(el, data) {
   this.el = el.appendChild(domify(this.html));
   this.el.querySelector('.search').addEventListener('click', this._show.bind(this), false);
+  this.el.querySelector('form').addEventListener('submit', this._hide.bind(this));
   this.inputEl = this.el.querySelector('input');
   this.inputEl.addEventListener('blur', this._hide.bind(this));
   this.input = observable.input(this.inputEl, 'value', 'change');
@@ -29,7 +30,8 @@ Search.prototype._show = function show() {
   this.inputEl.classList.add('show');
 };
 
-Search.prototype._hide = function hide() {
+Search.prototype._hide = function hide(e) {
+  if (e && e.preventDefault) e.preventDefault();
   this.inputEl.classList.remove('show');
   if (document.activeElement === this.inputEl) {
     this.inputEl.blur();
