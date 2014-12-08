@@ -23,6 +23,7 @@ function Detail() {
 }
 
 Detail.prototype.appendTo = function appendTo(el, data) {
+  if (this.el) return;
   this.player = player[data.type]();
   this.data = data;
   this.placeholder = el;
