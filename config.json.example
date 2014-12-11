@@ -2,5 +2,20 @@
   "port": 1500,
   "vimeo": {
     "access_token": ""
+  },
+  "oauth": {
+    "debug": true,
+    "github": {
+      "id": "",
+      "secret": ""
+    },
+    "twitter": {
+      "id": "",
+      "secret": ""
+    },
+    "facebook": {
+      "id": "",
+      "secret": ""
+    }
   }
 }

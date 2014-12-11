@@ -1,0 +1,44 @@
+.login-widget {
+  left: 20px;
+  top: -100px;
+  width: 100%;
+  position: fixed;
+  padding: 0;
+  -webkit-transition: all 0.3s ease-out;
+  -moz-transition:    all 0.3s ease-out;
+  -o-transition:      all 0.3s ease-out;
+  transition:         all 0.3s ease-out;
+}
+
+.login-widget.open {
+  top: 20px;
+}
+
+.login-widget.logging-in {
+  left: -100%;
+}
+
+.login-widget h4 {
+  text-align: center;
+}
+
+.login-widget ul {
+  list-style: none;
+  margin: 24px 0 0 0;
+  padding: 0;
+  width: calc(100% - 42px);
+}
+
+.login-widget li {
+  margin: 0;
+  padding: 0 0 20px 0;
+  width: 100%;
+}
+
+.login-widget a {
+  width: 100%;
+}
+
+.login-widget .zocial:before {
+  width: 19px;
+}

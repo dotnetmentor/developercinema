@@ -3,7 +3,8 @@ html {
 }
 
 html, body {
-  width: 100%;
+  width: calc(100% - 40px);
+  height: calc(100% - 40px);
 }
 
 body {
@@ -11,7 +12,6 @@ body {
   color: rgba(255, 255, 255, 0.8);
   -webkit-tap-highlight-color: rgba(0,0,0,0);
   font-family: sans-serif;
-  height: calc(100% - 65px - 2px);
   padding: 20px;
 }
 

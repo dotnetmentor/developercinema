@@ -35,15 +35,11 @@ Videos.prototype.appendTo = function appendTo(el, data, title) {
     'ul': {style: 'width: ' + (240 * data.length) + 'px'},
     'h3 span': title,
     'h3 i': {'class': 'icon-' + title.toLowerCase()},
-    'li': data.map(map.bind(this))
+    'li': data.map(map)
   };
 
   function map(item, i) {
-    var src = hyperglue(item.embed).src;
     return {
-      'a': {
-        href: src
-      },
       'a img': {
         src: item.image
       },

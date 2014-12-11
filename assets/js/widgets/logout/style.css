@@ -1,0 +1,25 @@
+.logout-widget {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 45px;
+  z-index: 1;
+  height: 45px;
+}
+
+.logout-widget .logout {
+  background-color: rgba(170, 170, 170, 1);
+  border: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  border: none;
+  height: 45px;
+  width: 45px;
+  font-size: 16px;
+  color: white;
+}
+
+body[data-standalone] .logout-widget .search {
+  top: 25px;
+}

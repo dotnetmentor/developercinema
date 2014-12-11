@@ -4,24 +4,57 @@ var request = require('hyperquest');
 var apiBase = window.location.protocol + '//' + window.location.host + '/api';
 var jsonstream = require('JSONStream');
 var concat = require('concat-stream');
+var hello = require('hellojs');
+var oauth = require('../../config.json').oauth;
+var cookie = require('cookie-monster');
+var session = cookie.get('session-id');
 
 var spinner = widgets.spinner();
 var search = widgets.search();
+var login = widgets.login();
+var logout = widgets.logout();
 
 var body = document.body;
+
 var viewport = document.querySelector('.viewport');
 
 if (window.navigator.standalone) body.setAttribute('data-standalone', true);
 
-search.appendTo(viewport);
-spinner.appendTo(body);
+if (session) {
+  render();
+} else {
+  hello.init({
+    github: oauth.github.id,
+    twitter: oauth.twitter.id,
+    facebook: oauth.facebook.id
+  },{
+    redirect_uri: '/auth/callback',
+    oauth_proxy: '/auth/proxy'
+  });
+
+  var loginOptions = {response_type: 'token', display: 'page'};
+  login.appendTo(viewport);
+}
+
+function render() {
+  search.appendTo(viewport);
+  logout.appendTo(viewport);
+}
 
 var youtube = widgets.videolist();
 var vimeo = widgets.videolist();
 var detail = widgets.detail();
 var status = widgets.status();
 
+login.on('login', auth);
+
+function auth(provider) {
+  spinner.start();
+  hello.login(provider, loginOptions);
+}
+
 status.appendTo(body);
+spinner.appendTo(body);
 
 search.on('search', function search(value) {
   spinner.start();

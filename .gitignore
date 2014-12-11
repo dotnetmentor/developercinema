@@ -3,7 +3,9 @@ config.json
 rsync.bat
 node_modules
 .DS_Store
-fontello/css
-fontello/font
+fontello
+!fontello/config.json
+!fontello/LICENSE.txt
+zocial
 npm-debug.log
 npm-scripts/backup.json

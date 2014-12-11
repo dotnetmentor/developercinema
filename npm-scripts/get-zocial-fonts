@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if [ ! -d ./zocial ]; then
+  git clone git@github.com:samcollins/css-social-buttons.git zocial
+fi
+
+cp ./zocial/css/* ./fontello/css/
