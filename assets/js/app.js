@@ -14,6 +14,11 @@ var search = widgets.search();
 var login = widgets.login();
 var profile = widgets.profile();
 
+var youtube = widgets.videolist();
+var vimeo = widgets.videolist();
+var detail = widgets.detail();
+var status = widgets.status();
+
 var body = document.body;
 
 var viewport = document.querySelector('.viewport');
@@ -36,7 +41,7 @@ hello.on('auth.login', function(auth){
 if (session) {
   render();
 } else {
-  localStorage.removeItem('hello');
+  localStorage.clear();
   var loginOptions = {response_type: 'code', display: 'page', scope: 'email'};
   login.appendTo(viewport);
 }
@@ -44,12 +49,11 @@ if (session) {
 function render() {
   search.appendTo(viewport);
   profile.appendTo(viewport);
+  var searchResults = localStorage.getItem('searchresults');
+  if (searchResults) {
+    renderSearch(JSON.parse(searchResults));
+  }
 }
-
-var youtube = widgets.videolist();
-var vimeo = widgets.videolist();
-var detail = widgets.detail();
-var status = widgets.status();
 
 login.on('login', auth);
 
@@ -66,11 +70,12 @@ search.on('search', function search(value) {
   var post = request.post(apiBase + '/search?q=' + encodeURIComponent(value));
   post.
     pipe(jsonstream.parse()).
-    pipe(concat({encoding: 'object'}, searchResponse));
+    pipe(concat({encoding: 'object'}, renderSearch));
   post.end();
 });
 
-function searchResponse(results) {
+function renderSearch(results) {
+  localStorage.setItem('searchresults', JSON.stringify(results));
   results = results[0];
   if (results) {
     youtube.remove();
