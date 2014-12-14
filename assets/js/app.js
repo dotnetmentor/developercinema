@@ -12,7 +12,7 @@ var session = cookie.get('session-id');
 var spinner = widgets.spinner();
 var search = widgets.search();
 var login = widgets.login();
-var logout = widgets.logout();
+var profile = widgets.profile();
 
 var body = document.body;
 
@@ -20,25 +20,32 @@ var viewport = document.querySelector('.viewport');
 
 if (window.navigator.standalone) body.setAttribute('data-standalone', true);
 
+hello.init({
+  github: oauth.github.id,
+  twitter: oauth.twitter.id,
+  facebook: oauth.facebook.id
+},{
+  redirect_uri: '/auth/callback',
+  oauth_proxy: '/auth/proxy'
+});
+
+hello.on('auth.login', function(auth){
+	hello(auth.network).api('/me').
+    then(profile.addProfile.bind(profile), profile.logout.bind(profile));
+});
+
 if (session) {
   render();
 } else {
-  hello.init({
-    github: oauth.github.id,
-    twitter: oauth.twitter.id,
-    facebook: oauth.facebook.id
-  },{
-    redirect_uri: '/auth/callback',
-    oauth_proxy: '/auth/proxy'
-  });
-
-  var loginOptions = {response_type: 'token', display: 'page'};
+  var loginOptions = {response_type: 'code', display: 'page', scope: 'email'};
   login.appendTo(viewport);
+  Object.keys(JSON.parse(localStorage.getItem('hello') || '{}')).
+    forEach(hello.logout.bind(hello))
 }
 
 function render() {
   search.appendTo(viewport);
-  logout.appendTo(viewport);
+  profile.appendTo(viewport);
 }
 
 var youtube = widgets.videolist();
