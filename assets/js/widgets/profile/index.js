@@ -17,10 +17,6 @@ Profile.prototype.appendTo = function appendTo(el, data) {
   this.el = el.appendChild(domify(this.html));
 };
 
-Profile.prototype.logout = function logout() {
-  this.el.querySelector('.logout-form').submit();
-};
-
 Profile.prototype.addProfile = function addProfile(profile) {
   this.profile = profile;
   this.el.querySelector('.profile').href = profile.html_url || profile.url || profile.link;
