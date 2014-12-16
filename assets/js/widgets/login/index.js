@@ -1,60 +1,60 @@
 var insertCss = require('insert-css');
 var inherits = require('inherits');
-var hyperglue = require('hyperglue');
+var domify = require('domify');
 var EventEmitter = require('events').EventEmitter;
+var of = require('observable-form');
 var fs = require('fs');
-var titleCase = require('titlecase');
 
 module.exports = Login;
 inherits(Login, EventEmitter);
-
-var PROVIDERS = ['github', 'twitter', 'facebook'];
 
 function Login() {
   if (!(this instanceof Login)) return new Login();
   this.html = fs.readFileSync(__dirname + '/index.html', 'utf-8');
   insertCss(fs.readFileSync(__dirname + '/style.css', 'utf-8'));
-  this.listeners = {};
-  var self = this;
-  PROVIDERS.forEach(add);
-  function add(provider) {
-    self.listeners[provider] = function click() {
-      self.el.classList.add('logging-in');
-      self.emit('login', provider);
-    };
-  }
+  this.listeners = {
+    reset: this._reset.bind(this),
+    login: this._login.bind(this),
+    noop: this._noop.bind(this)
+  };
 }
 
 Login.prototype.appendTo = function appendTo(el) {
-  this.list = {
-    'li': PROVIDERS.map(map)
-  };
-
-  function map(provider) {
-    return {
-      'a': {
-        'class': 'zocial ' + provider,
-        '_text': titleCase(provider)
-      }
-    };
-  }
-
-  this.el = el.appendChild(hyperglue(this.html, this.list));
-
+  this.el = el.appendChild(domify(this.html));
+  this.fields = of(this.el).fields;
   setTimeout(open.bind(this), 100);
-
   function open() {
     this.el.classList.add('open');
   }
-
   this._eventListeners('addEventListener');
 };
 
-Login.prototype._eventListeners = function eventListeners(method) {
-  PROVIDERS.forEach(add.bind(this));
-  function add(provider) {
-    this.el.querySelector('.' + provider)[method]('click', this.listeners[provider], false);
+Login.prototype._noop = function noop(e) {
+  e.preventDefault();
+};
+
+Login.prototype._reset = function reset(e) {
+  e.preventDefault();
+  if (this.fields.email()) {
+    this.emit('reset', {email: this.fields.email()});
+  } else {
+    this.emit('invalid', 'Enter email');
   }
+};
+
+Login.prototype._login = function login(e) {
+  e.preventDefault();
+  if (this.fields.email() && this.fields.password()) {
+    this.emit('login', {email: this.fields.email(), password: this.fields.password()});
+  } else {
+    this.emit('invalid', 'Enter email and password');
+  }
+};
+
+Login.prototype._eventListeners = function eventListeners(method) {
+  this.el.querySelector('.credentials')[method]('submit', this.listeners.noop, false);
+  this.el.querySelector('.login')[method]('click', this.listeners.login, false);
+  this.el.querySelector('.reset')[method]('click', this.listeners.reset, false);
 };
 
 Login.prototype.remove = function remove() {

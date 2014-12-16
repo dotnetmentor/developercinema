@@ -6,6 +6,5 @@ node_modules
 fontello
 !fontello/config.json
 !fontello/LICENSE.txt
-zocial
 npm-debug.log
 npm-scripts/backup.json

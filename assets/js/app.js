@@ -4,8 +4,6 @@ var request = require('hyperquest');
 var apiBase = window.location.protocol + '//' + window.location.host + '/api';
 var jsonstream = require('JSONStream');
 var concat = require('concat-stream');
-var hello = require('hellojs');
-var oauth = require('../../config.json').oauth;
 var cookie = require('cookie-monster');
 var session = cookie.get('session-id');
 
@@ -25,26 +23,18 @@ var viewport = document.querySelector('.viewport');
 
 if (window.navigator.standalone) body.setAttribute('data-standalone', true);
 
-hello.init({
-  github: oauth.github.id,
-  twitter: oauth.twitter.id,
-  facebook: oauth.facebook.id
-},{
-  redirect_uri: '/auth/callback',
-  oauth_proxy: '/auth/proxy'
-});
-
-hello.on('auth.login', function(auth){
-	hello(auth.network).api('/me').then(profile.addProfile.bind(profile));
-});
-
 if (session) {
   render();
 } else {
   localStorage.clear();
-  var loginOptions = {response_type: 'code', display: 'page', scope: 'email'};
   login.appendTo(viewport);
 }
+
+login.on('invalid', status.update.bind(status));
+login.on('login', function() {
+  cookie.set('session-id', 42);
+  location.reload();
+});
 
 function render() {
   search.appendTo(viewport);
@@ -53,13 +43,6 @@ function render() {
   if (searchResults) {
     renderSearch(JSON.parse(searchResults));
   }
-}
-
-login.on('login', auth);
-
-function auth(provider) {
-  spinner.start();
-  hello.login(provider, loginOptions);
 }
 
 status.appendTo(body);
