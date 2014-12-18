@@ -2,6 +2,9 @@ var insertCss = require('insert-css');
 var inherits = require('inherits');
 var domify = require('domify');
 var EventEmitter = require('events').EventEmitter;
+var validator = require('validate-form');
+var email = require('validate-form/email');
+var min = require('validate-form/min');
 var of = require('observable-form');
 var fs = require('fs');
 
@@ -21,7 +24,8 @@ function Login() {
 
 Login.prototype.appendTo = function appendTo(el) {
   this.el = el.appendChild(domify(this.html));
-  this.fields = of(this.el).fields;
+  this.form = of(this.el);
+  this.fields = this.form.fields;
   setTimeout(open.bind(this), 100);
   function open() {
     this.el.classList.add('open');
@@ -35,20 +39,25 @@ Login.prototype._noop = function noop(e) {
 
 Login.prototype._reset = function reset(e) {
   e.preventDefault();
-  if (this.fields.email()) {
-    this.emit('reset', {email: this.fields.email()});
-  } else {
-    this.emit('invalid', 'Enter email');
+  var errors = validator({
+    email: email()
+  })(this.form.toJSON());
+  if (errors) {
+    return this.emit('invalid', showError(errors));
   }
+  this.emit('reset', {email: this.fields.email()});
 };
 
 Login.prototype._login = function login(e) {
   e.preventDefault();
-  if (this.fields.email() && this.fields.password()) {
-    this.emit('login', {email: this.fields.email(), password: this.fields.password()});
-  } else {
-    this.emit('invalid', 'Enter email and password');
+  var errors = validator({
+    email: email(),
+    password: min(6)
+  })(this.form.toJSON());
+  if (errors) {
+    return this.emit('invalid', showError(errors));
   }
+  this.emit('login', {email: this.fields.email(), password: this.fields.password()});
 };
 
 Login.prototype._eventListeners = function eventListeners(method) {
@@ -63,3 +72,7 @@ Login.prototype.remove = function remove() {
   this.el.parentNode.removeChild(this.el);
   this.el = null;
 };
+
+function showError(errors) {
+  return errors.map(function(x) { return x.message; }).join(', ');
+}
