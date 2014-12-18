@@ -44,6 +44,7 @@ Login.prototype._reset = function reset(e) {
     email: email()
   })(this.form.toJSON());
   if (errors) {
+    this.el.querySelector('.email').focus();
     return this.emit('invalid', showError(errors));
   }
   this.emit('reset', {email: this.fields.email()});
@@ -56,6 +57,7 @@ Login.prototype._login = function login(e) {
     password: min(6)
   })(this.form.toJSON());
   if (errors) {
+    this.el.querySelector('.' + errors[0].attribute).focus();
     return this.emit('invalid', showError(errors));
   }
   this.emit('login', {email: this.fields.email(), password: this.fields.password()});
@@ -75,5 +77,5 @@ Login.prototype.remove = function remove() {
 };
 
 function showError(errors) {
-  return errors.map(function(x) { return x.message; }).join(', ');
+  return errors.map(function(x) { return x.message; }).join('<br>');
 }
