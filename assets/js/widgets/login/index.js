@@ -31,6 +31,7 @@ Login.prototype.appendTo = function appendTo(el) {
     this.el.classList.add('open');
   }
   this._eventListeners('addEventListener');
+  this.el.querySelector('.email').focus();
 };
 
 Login.prototype._noop = function noop(e) {
