@@ -20,7 +20,7 @@ Status.prototype.update = function update(err, successText) {
   reset();
   el.classList.add(err ? 'error' : 'success');
   el.textContent = !err ? successText : err;
-  setTimeout(reset, 3000);
+  setTimeout(reset, 6000);
 
   function reset() {
     el.classList.remove('success');
