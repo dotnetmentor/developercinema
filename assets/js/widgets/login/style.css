@@ -90,6 +90,14 @@
   margin-left: 0px;
 }
 
+@media all and (min-width: 600px) {
+  .login-widget {
+    margin-top: 100px;
+    margin-left: calc(50% - 300px);
+    width: 600px;
+  }
+}
+
 @media all and (max-width: 500px) {
   .login-widget button {
     width: calc(100% - 45px);
