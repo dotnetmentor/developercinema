@@ -2,5 +2,8 @@
   "port": 1500,
   "vimeo": {
     "access_token": ""
+  },
+  "keygrip": {
+    "keys": ["secret1", "secret2", "secret3", "secret4", "secret5"]
   }
 }

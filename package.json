@@ -46,6 +46,7 @@
     "levelup": "^0.19.0",
     "map-stream": "0.0.5",
     "mime": "^1.2.11",
+    "monot": "^0.1.2",
     "node-mandrill": "^1.0.1",
     "observable": "^2.1.3",
     "observable-form": "0.0.5",
