@@ -56,6 +56,7 @@ function checkPostUser() {
         status.update(err);
       }
     } else {
+      spinner.start();
       location.href = '/';
     }
   });
@@ -64,6 +65,7 @@ function checkPostUser() {
 function checkPost() {
   return concat({encoding: 'object'}, function(err) {
     if (err.length) {
+      spinner.start();
       profile.logout();
     }
   });
@@ -129,5 +131,8 @@ detail.on('*', function(context, name, msg) {
 detail.on('finished', detail.remove.bind(detail));
 
 function checkApiResponse(response) {
-  if (response.statusCode !== 200) profile.logout();
+  if (response.statusCode !== 200) {
+    spinner.start();
+    profile.logout();
+  }
 }
