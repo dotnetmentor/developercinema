@@ -61,6 +61,14 @@ function checkPostUser() {
   });
 }
 
+function checkPost() {
+  return concat({encoding: 'object'}, function(err) {
+    if (err.length) {
+      profile.logout();
+    }
+  });
+}
+
 function render() {
   search.appendTo(viewport);
   profile.appendTo(viewport);
@@ -110,7 +118,10 @@ detail.on('*', function(context, name, msg) {
     detail.reset();
     status.update(null, 'Please leave a review!');
   }
-  console.log((context + ':' + name), msg);
+  var post = request.post(apiBase + '/metrics');
+  post.pipe(checkPost());
+  post.write(JSON.stringify({context: context, name: name, msg: msg}));
+  post.end();
 });
 
 detail.on('finished', detail.remove.bind(detail));
