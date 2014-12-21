@@ -47,7 +47,7 @@ Login.prototype._reset = function reset(e) {
     this.el.querySelector('.email').focus();
     return this.emit('invalid', showError(errors));
   }
-  this.emit('reset', {email: this.fields.email()});
+  this.emit('reset', {username: this.fields.email()});
 };
 
 Login.prototype._login = function login(e) {
@@ -60,7 +60,7 @@ Login.prototype._login = function login(e) {
     this.el.querySelector('.' + errors[0].attribute).focus();
     return this.emit('invalid', showError(errors));
   }
-  this.emit('login', {email: this.fields.email(), password: this.fields.password()});
+  this.emit('login', {username: this.fields.email(), password: this.fields.password()});
 };
 
 Login.prototype._eventListeners = function eventListeners(method) {

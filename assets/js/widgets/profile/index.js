@@ -22,3 +22,7 @@ Profile.prototype.addProfile = function addProfile(profile) {
   this.el.querySelector('.profile').href = profile.html_url || profile.url || profile.link;
   this.el.querySelector('.picture').src = profile.thumbnail;
 };
+
+Profile.prototype.logout = function logout() {
+  if (this.el) this.el.querySelector('.logout-form').submit();
+};

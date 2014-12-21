@@ -4,8 +4,6 @@ var request = require('hyperquest');
 var apiBase = window.location.protocol + '//' + window.location.host + '/api';
 var jsonstream = require('JSONStream');
 var concat = require('concat-stream');
-var cookie = require('cookie-monster');
-var session = cookie.get('session-id');
 
 var spinner = widgets.spinner();
 var search = widgets.search();
@@ -23,18 +21,45 @@ var viewport = document.querySelector('.viewport');
 
 if (window.navigator.standalone) body.setAttribute('data-standalone', true);
 
-if (session) {
-  render();
-} else {
-  localStorage.clear();
-  login.appendTo(viewport);
+var get = request(apiBase + '/authenticated').pipe(concat(authenticated));
+
+function authenticated(ok) {
+  if (JSON.parse(ok)) {
+    render();
+  } else {
+    localStorage.clear();
+    login.appendTo(viewport);
+  }
 }
 
 login.on('invalid', status.update.bind(status));
-login.on('login', function() {
-  cookie.set('session-id', 42);
-  location.reload();
+login.on('login', function(payload) {
+  var post = request.post(apiBase + '/login');
+  post.pipe(checkPostUser());
+  post.write(JSON.stringify(payload));
+  post.end();
 });
+
+login.on('reset', function(payload) {
+  var post = request.post(apiBase + '/reset');
+  post.pipe(checkPostUser());
+  post.write(JSON.stringify(payload));
+  post.end();
+});
+
+function checkPostUser() {
+  return concat({encoding: 'object'}, function(err) {
+    if (err.length) {
+      if (err == 'email_sent') {
+        status.update(null, 'Welcome! Please verify link in email');
+      } else {
+        status.update(err);
+      }
+    } else {
+      location.href = '/';
+    }
+  });
+}
 
 function render() {
   search.appendTo(viewport);
@@ -51,6 +76,7 @@ spinner.appendTo(body);
 search.on('search', function search(value) {
   spinner.start();
   var post = request.post(apiBase + '/search?q=' + encodeURIComponent(value));
+  post.on('response', checkApiResponse);
   post.
     pipe(jsonstream.parse()).
     pipe(concat({encoding: 'object'}, renderSearch));
@@ -88,3 +114,7 @@ detail.on('*', function(context, name, msg) {
 });
 
 detail.on('finished', detail.remove.bind(detail));
+
+function checkApiResponse(response) {
+  if (response.statusCode !== 200) profile.logout();
+}

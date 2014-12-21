@@ -8,4 +8,6 @@ fontello
 !fontello/LICENSE.txt
 npm-debug.log
 npm-scripts/backup.json
+store
 session
+account
