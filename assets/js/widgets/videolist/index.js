@@ -30,6 +30,7 @@ Videos.prototype._selectVideo = function selectVideo(e) {
 
 Videos.prototype.appendTo = function appendTo(el, data, title) {
   data = data || [];
+  if (!data.length) return;
   this.data = data;
   this.list = {
     'ul': {style: 'width: ' + (240 * data.length) + 'px'},
