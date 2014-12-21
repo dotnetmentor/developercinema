@@ -118,10 +118,12 @@ detail.on('*', function(context, name, msg) {
     detail.reset();
     status.update(null, 'Please leave a review!');
   }
-  var post = request.post(apiBase + '/metrics');
-  post.pipe(checkPost());
-  post.write(JSON.stringify({context: context, name: name, msg: msg}));
-  post.end();
+  if (msg) {
+    var post = request.post(apiBase + '/metrics');
+    post.pipe(checkPost());
+    post.write(JSON.stringify({context: context, name: name, msg: msg}));
+    post.end();
+  }
 });
 
 detail.on('finished', detail.remove.bind(detail));
