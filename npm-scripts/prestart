@@ -23,6 +23,5 @@ else
       """
     fi
     ./npm-scripts/make-fontello-fonts
-    ./npm-scripts/get-zocial-fonts
   fi
 fi

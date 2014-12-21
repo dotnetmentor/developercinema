@@ -3,19 +3,7 @@
   "vimeo": {
     "access_token": ""
   },
-  "oauth": {
-    "debug": true,
-    "github": {
-      "id": "",
-      "secret": ""
-    },
-    "twitter": {
-      "id": "",
-      "secret": ""
-    },
-    "facebook": {
-      "id": "",
-      "secret": ""
-    }
+  "keygrip": {
+    "keys": ["secret1", "secret2", "secret3", "secret4", "secret5"]
   }
 }

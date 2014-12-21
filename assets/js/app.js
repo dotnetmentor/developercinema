@@ -4,10 +4,6 @@ var request = require('hyperquest');
 var apiBase = window.location.protocol + '//' + window.location.host + '/api';
 var jsonstream = require('JSONStream');
 var concat = require('concat-stream');
-var hello = require('hellojs');
-var oauth = require('../../config.json').oauth;
-var cookie = require('cookie-monster');
-var session = cookie.get('session-id');
 
 var spinner = widgets.spinner();
 var search = widgets.search();
@@ -25,25 +21,52 @@ var viewport = document.querySelector('.viewport');
 
 if (window.navigator.standalone) body.setAttribute('data-standalone', true);
 
-hello.init({
-  github: oauth.github.id,
-  twitter: oauth.twitter.id,
-  facebook: oauth.facebook.id
-},{
-  redirect_uri: '/auth/callback',
-  oauth_proxy: '/auth/proxy'
+var get = request(apiBase + '/authenticated').pipe(concat(authenticated));
+
+function authenticated(ok) {
+  if (JSON.parse(ok)) {
+    render();
+  } else {
+    localStorage.clear();
+    login.appendTo(viewport);
+  }
+}
+
+login.on('invalid', status.update.bind(status));
+login.on('login', function(payload) {
+  var post = request.post(apiBase + '/login');
+  post.pipe(checkPostUser());
+  post.write(JSON.stringify(payload));
+  post.end();
 });
 
-hello.on('auth.login', function(auth){
-	hello(auth.network).api('/me').then(profile.addProfile.bind(profile));
+login.on('reset', function(payload) {
+  var post = request.post(apiBase + '/reset');
+  post.pipe(checkPostUser());
+  post.write(JSON.stringify(payload));
+  post.end();
 });
 
-if (session) {
-  render();
-} else {
-  localStorage.clear();
-  var loginOptions = {response_type: 'code', display: 'page', scope: 'email'};
-  login.appendTo(viewport);
+function checkPostUser() {
+  return concat({encoding: 'object'}, function(err) {
+    if (err.length) {
+      if (err == 'email_sent') {
+        status.update(null, 'Welcome! Please verify link in email');
+      } else {
+        status.update(err);
+      }
+    } else {
+      location.href = '/';
+    }
+  });
+}
+
+function checkPost() {
+  return concat({encoding: 'object'}, function(err) {
+    if (err.length) {
+      profile.logout();
+    }
+  });
 }
 
 function render() {
@@ -55,19 +78,13 @@ function render() {
   }
 }
 
-login.on('login', auth);
-
-function auth(provider) {
-  spinner.start();
-  hello.login(provider, loginOptions);
-}
-
 status.appendTo(body);
 spinner.appendTo(body);
 
 search.on('search', function search(value) {
   spinner.start();
   var post = request.post(apiBase + '/search?q=' + encodeURIComponent(value));
+  post.on('response', checkApiResponse);
   post.
     pipe(jsonstream.parse()).
     pipe(concat({encoding: 'object'}, renderSearch));
@@ -101,7 +118,14 @@ detail.on('*', function(context, name, msg) {
     detail.reset();
     status.update(null, 'Please leave a review!');
   }
-  console.log((context + ':' + name), msg);
+  var post = request.post(apiBase + '/metrics');
+  post.pipe(checkPost());
+  post.write(JSON.stringify({context: context, name: name, msg: msg}));
+  post.end();
 });
 
 detail.on('finished', detail.remove.bind(detail));
+
+function checkApiResponse(response) {
+  if (response.statusCode !== 200) profile.logout();
+}
