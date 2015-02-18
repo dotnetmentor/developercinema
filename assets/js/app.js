@@ -121,10 +121,11 @@ detail.on('*', function(context, name, msg) {
     status.update(null, 'Please leave a review!');
   }
   if (msg) {
-    var post = request.post(apiBase + '/metrics');
-    post.pipe(checkPost());
-    post.write(JSON.stringify({context: context, name: name, msg: msg}));
-    post.end();
+    console.log('metrics', context, name, msg);
+    //var post = request.post(apiBase + '/metrics');
+    //post.pipe(checkPost());
+    //post.write(JSON.stringify({context: context, name: name, msg: msg}));
+    //post.end();
   }
 });
 
@@ -136,3 +137,11 @@ function checkApiResponse(response) {
     profile.logout();
   }
 }
+
+// tags
+// +sessioncam
+var scRec=document.createElement('SCRIPT');
+scRec.type='text/javascript';
+scRec.src="//d2oh4tlt9mrke9.cloudfront.net/Record/js/sessioncam.recorder.js";
+document.getElementsByTagName('head')[0].appendChild(scRec);
+// -sessioncam
