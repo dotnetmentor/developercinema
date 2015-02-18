@@ -15,7 +15,7 @@
     "new_release": "npm version patch && git push --tags && git push && npm run deploy production && npm run deploy staging",
     "quick_release": "npm run deploy production && npm run deploy staging",
     "deploy": "bash npm-scripts/deploy",
-    "prestart": "bash npm-scripts/prestart",
+    "xprestart": "bash npm-scripts/prestart",
     "start": "bash npm-scripts/start",
     "quick": "bash npm-scripts/quickstart"
   },
