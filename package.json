@@ -23,6 +23,7 @@
     "JSONStream": "^0.10.0",
     "accountdown": "^2.0.1",
     "accountdown-basic": "^1.0.0",
+    "appcached": "^0.7.0",
     "body": "^4.5.0",
     "brfs": "^1.0.2",
     "browserify": "^6.3.3",
