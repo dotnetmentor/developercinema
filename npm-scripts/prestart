@@ -22,6 +22,5 @@ else
       fs.writeFileSync('./config.json', JSON.stringify(merged, null, 4));
       """
     fi
-    ./npm-scripts/make-fontello-fonts
   fi
 fi

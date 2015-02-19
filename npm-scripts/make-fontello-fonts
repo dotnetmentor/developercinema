@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-rm -rf fontello/css
-rm -rf fontello/font
-./node_modules/.bin/fontello-cli --config ./fontello/config.json --css fontello/css --font fontello/font install
-
