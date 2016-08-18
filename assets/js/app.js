@@ -1,5 +1,6 @@
 var bulk = require('bulk-require');
-var widgets = bulk(__dirname + '/widgets', ['**/index.js']);
+var path = require('path')
+var widgets = bulk(path.join(__dirname, '/widgets'), ['**/index.js']);
 var request = require('hyperquest');
 var apiBase = window.location.protocol + '//' + window.location.host + '/api';
 var jsonstream = require('JSONStream');
